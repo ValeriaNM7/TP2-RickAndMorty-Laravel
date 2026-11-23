@@ -17,6 +17,17 @@
             <a href="{{ route('characters.index') }}">Personajes</a>
             <a href="{{ route('episodes.index') }}">Episodios</a>
             <a href="{{ route('locations.index') }}">Ubicaciones</a>
+
+            @auth
+                <span>Hola, {{ Auth::user()->name }}</span>
+                <form action="{{ route('logout') }}" method="POST" style="display:inline">
+                    @csrf
+                    <button type="submit">Salir</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}">Ingresar</a>
+                <a href="{{ route('register') }}">Registrarse</a>
+            @endauth
         </nav>
 
         @foreach ($episodes as $episode)
