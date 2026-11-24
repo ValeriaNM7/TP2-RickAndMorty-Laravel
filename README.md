@@ -1,59 +1,81 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TP02 Rick & Morty App Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Trabajo Practico N°2 de DAW
 
-## About Laravel
+Aplicacion web hecha con Laravel que usa la base de datos del TP01 para consultar los personajes,
+episodios y ubicaciones de Rick and Morty. Tiene un explorador publico, registro y login de usuarios
+y listas personalizadas para los usuarios registrados.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Parte 1: Explorador
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Alumno: Valeria Moraschetti.
 
-## Learning Laravel
+(Falta completar)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Parte 2: Base de datos, registro y login
 
-## Laravel Sponsors
+Alumno: Josefina Acevedo.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Archivos:
 
-### Premium Partners
+- database/migrations/2026_11_23_222338_create_user_lists_table.php: crea la tabla de listas.
+- database/migrations/2026_11_23_222340_create_character_user_list_table.php: crea la tabla de personajes de cada lista.
+- database/migrations/2026_11_23_222342_create_episode_user_list_table.php: crea la tabla de episodios de cada lista.
+- app/Http/Controllers/AuthController.php: registro, login y logout.
+- resources/views/auth/register.blade.php: formulario de registro.
+- resources/views/auth/login.blade.php: formulario de login.
+- routes/web.php: rutas de registro, login y logout (desde "REGISTRO Y LOGIN").
+- Menu de las paginas: links de Ingresar, Registrarse y Salir (bloque `@auth`).
+- .env.example: archivo de configuracion de ejemplo.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Tablas
 
-## Contributing
+Se usa la base `rickandmorty` del TP01 sin cambiar sus tablas (characters, episodes, locations y
+character_episode). Las tablas nuevas se crean con migraciones de Laravel:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- users: usuarios registrados (la trae Laravel).
+- user_lists: listas de cada usuario (id, name, type, user_id).
+- character_user_list: que personajes tiene cada lista (user_list_id, character_id).
+- episode_user_list: que episodios tiene cada lista (user_list_id, episode_id).
 
-## Code of Conduct
+Importante:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- type puede ser 'characters' o 'episodes', segun que guarda la lista.
+- character_user_list y episode_user_list tienen clave primaria compuesta, asi no se puede repetir
+  un personaje o episodio en la misma lista.
+- Si se borra una lista se borran sus elementos, y si se borra un usuario se borran sus listas.
+- La tabla se llama user_lists porque `list` es una palabra reservada de PHP.
+- character_id y episode_id son `integer` porque los id del TP01 son INT.
+- Las migraciones solo agregan tablas, asi que el importador del TP01 sigue funcionando.
 
-## Security Vulnerabilities
+### Registro y login
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Para registrarse se pide nombre, email y contraseña. Se valida que el email no este repetido y que
+  la contraseña tenga al menos 8 caracteres.
+- La contraseña se guarda encriptada con `Hash::make()`.
+- El login se hace con `Auth::attempt()` y el logout con `Auth::logout()`.
+- Las paginas de login y registro usan el middleware `guest` y el logout usa `auth`.
+- El explorador sigue siendo publico, no hace falta iniciar sesion.
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Parte 3: Listas personalizadas
+
+Alumno: Ignacio Oroño.
+
+(Falta completar)
+
+
+## Como usarlo
+
+Requisitos: PHP 8.2 o mas nuevo (el de XAMPP sirve) con las extensiones `pdo_mysql` y `zip`
+activadas, Composer y MySQL con la base `rickandmorty` del TP01 cargada.
+
+1. Abrir una terminal en la carpeta del proyecto y ejecutar `composer install`.
+2. Copiar `.env.example` y llamarlo `.env`.
+3. En `.env`, poner la contraseña de MySQL de cada uno en `DB_PASSWORD`.
+4. Ejecutar `php artisan key:generate`.
+5. Ejecutar `php artisan migrate` para crear las tablas nuevas.
+6. Ejecutar `php artisan serve`.
+7. Entrar a http://localhost:8000
